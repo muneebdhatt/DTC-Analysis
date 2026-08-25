@@ -493,6 +493,66 @@ body {
   }
 }
 
+/* ── demo control (recording aid; only shown with ?demo) ──────────── */
+
+.sim {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 14px;
+  font-family: var(--font-mono), monospace;
+  font-size: 12.5px;
+  letter-spacing: 0.01em;
+  color: var(--card);
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: 0 6px 20px rgba(20, 19, 15, 0.22);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.sim:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 9px 26px rgba(20, 19, 15, 0.28);
+}
+
+.sim:active {
+  transform: translateY(0);
+}
+
+.sim-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--card);
+  animation: simpulse 1.8s ease-in-out infinite;
+}
+
+.sim-key {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  line-height: 1;
+  padding: 3px 5px;
+  border-radius: 2px;
+  background: rgba(250, 248, 244, 0.18);
+  border: 1px solid rgba(250, 248, 244, 0.35);
+}
+
+@keyframes simpulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 /* ── accessibility floor ──────────────────────────────────────────── */
 
 :focus-visible {
@@ -502,7 +562,8 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .digit-moved,
-  .pulse-active {
+  .pulse-active,
+  .sim-dot {
     animation: none;
   }
   .digit-moved {

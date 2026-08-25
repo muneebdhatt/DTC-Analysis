@@ -44,6 +44,20 @@ and a fractional-CFO client-book board.
 If you catch yourself editing a component to change a label or a number
 format, that belongs in the config instead.
 
+## Recording the "always current" moment
+
+Append `?demo` to the URL and a **Simulate today's sales** control appears
+bottom-right. Each click (or the `S` key) pours a synthetic batch of orders
+into the snapshot on screen — revenue, orders, AOV, ROAS, CAC and today's
+trend point all move together, the stamp resets to "just now", and only the
+digits that changed animate. `?demo=auto` ticks on its own every few seconds
+for a hands-free shot.
+
+It's synthetic and cover-safe: the numbers are derived from what's already
+rendered, nothing is written to the database, and demo mode pauses the poll
+so the momentum isn't clobbered mid-take. Without `?demo`, the public page is
+exactly as before. Increments live in the `demo` block of `dashboard.config.ts`.
+
 ## Design notes
 
 **Digit roll.** Only the characters that actually changed since the last

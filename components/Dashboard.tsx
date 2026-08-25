@@ -13,14 +13,18 @@ import RollingNumber from './RollingNumber';
 import SourceMarks from './SourceMarks';
 import Delta from './Delta';
 import { Sparkline, TrendChart } from './Charts';
+import { simulateTick } from '@/lib/simulate';
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+type DemoMode = false | 'manual' | 'auto';
 
 export default function Dashboard({ initial }: { initial: Snapshot | null }) {
   const [snap, setSnap] = useState<Snapshot | null>(initial);
   const [now, setNow] = useState<number | null>(null);
   const [pulling, setPulling] = useState(false);
+  const [demo, setDemo] = useState<DemoMode>(false);
 
   const refresh = useCallback(async () => {
     if (!url || !key) return;
@@ -42,6 +46,26 @@ export default function Dashboard({ initial }: { initial: Snapshot | null }) {
     }
   }, []);
 
+  // Advance the on-screen snapshot with a synthetic batch of orders, as if
+  // fresh data just arrived. Resets the stamp to "just now" and pulses the
+  // freshness dot, so the digit roll reads as a live update. Never writes
+  // to the database — see lib/simulate.ts.
+  const simulate = useCallback(() => {
+    setSnap((cur) => (cur ? simulateTick(cur, config.demo) : cur));
+    setNow(Date.now());
+    setPulling(true);
+    setTimeout(() => setPulling(false), 600);
+  }, []);
+
+  // Demo mode is URL-driven so the public page stays untouched: `?demo`
+  // shows the control, `?demo=auto` also ticks on its own. Read after mount
+  // to avoid a hydration mismatch — the first render matches the server.
+  useEffect(() => {
+    const value = new URLSearchParams(window.location.search).get('demo');
+    if (value === null) return;
+    setDemo(value === 'auto' ? 'auto' : 'manual');
+  }, []);
+
   // Relative time is computed after mount only — rendering it on the server
   // would bake in the build-time clock and mismatch on hydration.
   useEffect(() => {
@@ -51,6 +75,10 @@ export default function Dashboard({ initial }: { initial: Snapshot | null }) {
   }, []);
 
   useEffect(() => {
+    // In demo mode the local simulation drives the numbers; a background
+    // poll would fetch the real row mid-recording and snap them back down.
+    if (demo) return;
+
     const poll = setInterval(refresh, config.data.refreshIntervalMs);
     // Coming back to the tab should pull immediately rather than waiting
     // out the interval — this is the path you'll take on camera.
@@ -62,7 +90,30 @@ export default function Dashboard({ initial }: { initial: Snapshot | null }) {
       clearInterval(poll);
       document.removeEventListener('visibilitychange', onVisible);
     };
-  }, [refresh]);
+  }, [refresh, demo]);
+
+  // While demo mode is on, "S" ticks by hand and `?demo=auto` ticks itself.
+  useEffect(() => {
+    if (!demo) return;
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 's' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault();
+        simulate();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+
+    const auto =
+      demo === 'auto'
+        ? setInterval(simulate, config.demo?.autoIntervalMs ?? 4000)
+        : undefined;
+
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      if (auto) clearInterval(auto);
+    };
+  }, [demo, simulate]);
 
   if (!snap) {
     return (
@@ -204,6 +255,16 @@ export default function Dashboard({ initial }: { initial: Snapshot | null }) {
           {Math.round(config.data.refreshIntervalMs / 1000)}s
         </span>
       </footer>
+
+      {demo ? (
+        <button type="button" className="sim" onClick={simulate}>
+          <span className="sim-dot" aria-hidden="true" />
+          {config.demo?.label ?? "Simulate today's sales"}
+          <kbd className="sim-key" aria-hidden="true">
+            S
+          </kbd>
+        </button>
+      ) : null}
     </main>
   );
 }

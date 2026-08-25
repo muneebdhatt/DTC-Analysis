@@ -72,6 +72,20 @@ export interface DashboardConfig {
   };
   kpis: KpiDefinition[];
   trend: { label: string; format: ValueFormat };
+  /**
+   * Recording aid. Off by default and invisible on the public page — it
+   * only wakes up when the URL carries `?demo` (button) or `?demo=auto`
+   * (hands-free tick). Every number it produces is synthetic, derived from
+   * the snapshot already on screen; it never writes to the database.
+   */
+  demo?: {
+    label: string;
+    /** New orders poured in per tick, picked in this inclusive range. */
+    minOrders: number;
+    maxOrders: number;
+    /** Cadence of the `?demo=auto` tick, in milliseconds. */
+    autoIntervalMs: number;
+  };
 }
 
 export const config: DashboardConfig = {
@@ -179,6 +193,13 @@ export const config: DashboardConfig = {
   ],
 
   trend: { label: 'Revenue by day', format: 'currency_compact' },
+
+  demo: {
+    label: "Simulate today's sales",
+    minOrders: 2,
+    maxOrders: 6,
+    autoIntervalMs: 4000,
+  },
 };
 
 export const SOURCE_LABELS: Record<Source, string> = {
