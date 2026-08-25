@@ -26,6 +26,14 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* The active board's palette lands here, so switching variants repaints the
+   whole page — background included — from one build. */
+.page {
+  min-height: 100dvh;
+  background: var(--paper);
+  color: var(--ink);
+}
+
 .shell {
   max-width: 1080px;
   margin: 0 auto;

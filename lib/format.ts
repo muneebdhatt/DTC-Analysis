@@ -42,6 +42,8 @@ export function formatValue(value: unknown, format: ValueFormat): string {
       return `${n.toFixed(1)}%`;
     case 'ratio':
       return `${n.toFixed(2)}×`;
+    case 'days':
+      return `${Math.round(n)} days`;
     default:
       return String(value);
   }

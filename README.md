@@ -34,15 +34,46 @@ Add the two `NEXT_PUBLIC_*` variables in Project Settings → Environment
 Variables, then redeploy. The page is `force-dynamic`, so Vercel won't
 serve a stale snapshot from the edge cache.
 
-## Reskinning
+## One shell, a whole cluster of buyers
 
-`dashboard.config.ts` is the only file that changes: brand, palette, KPI
-definitions, formats, and which direction counts as good. Two variants are
-sketched at the bottom of that file — an agency client-performance board
-and a fractional-CFO client-book board.
+The shell isn't tied to one lead. Brand name, logo, palette, source labels
+and KPI definitions all live in `dashboard.config.ts`, which holds a registry
+of **variants** — each a complete board. The same build, reading the same
+one-row snapshot, wears any of them:
 
-If you catch yourself editing a component to change a label or a number
-format, that belongs in the config instead.
+| Variant | `?variant=` | Buyer | Headline | The joined tile |
+|---|---|---|---|---|
+| Rivera & Cole | `rivera-cole` *(default)* | DTC brand | Revenue | ROAS ← Store + Ads |
+| Halyard Media | `agency` | Marketing agency | Spend under management | Blended ROAS ← Ads + Revenue |
+| Meridian CFO | `cfo` | Fractional CFO | Recognised revenue | Current ratio ← Ledger + Billing |
+
+Each variant reinterprets the same numeric columns for its buyer — the ROAS
+column reads as *blended ROAS* for the agency and *current ratio* for the CFO;
+CAC becomes *cost / lead*, then *DSO in days*. One row powers all three, so
+there's nothing extra to seed to demo a reskin.
+
+**Pick a board two ways:**
+
+- **Per link** — append `?variant=agency` or `?variant=cfo` to any URL. Ideal
+  for outreach: send each buyer a link that already speaks their language, off
+  one deployment. The page title and the board both follow the variant.
+- **Per deployment** — set `NEXT_PUBLIC_DASHBOARD_VARIANT=cfo` in the project's
+  environment to make a whole deployment default to one board.
+
+**Pointing the right version at the right buyer:**
+
+- **DTC / ecommerce founders** → default `rivera-cole`. Revenue, ROAS/CAC,
+  orders/AOV, fulfilment — the operator's morning numbers.
+- **Agencies & fractional marketers** → `agency`. Spend under management,
+  blended ROAS, leads and cost-per-lead, reporting delivered on time — the
+  book-of-clients view a retainer renews on.
+- **Fractional CFOs & bookkeepers** → `cfo`. Recognised revenue, current ratio
+  and DSO, gross margin, operating expenses, month-end close — a client-book
+  board on a 90-day window.
+
+**Add a buyer** by adding one entry to the `variants` registry. If you catch
+yourself editing a component to change a label, a number format, or which way
+"good" points, that belongs in the config instead.
 
 ## Recording the "always current" moment
 

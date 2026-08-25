@@ -9,6 +9,7 @@ next-env.d.ts
 .playwright-mcp
 dashboard.png
 demo-moment.png
+variant-*.png
 files.zip
 
 .vercel

@@ -1,4 +1,4 @@
-import config from '@/dashboard.config';
+import type { DashboardConfig } from '@/dashboard.config';
 
 export interface TrendPoint {
   date: string;
@@ -47,7 +47,9 @@ const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
  * with the viewer's timezone. A browser-computed "last 30 days" would show
  * one thing in Karachi and another in New York.
  */
-export async function fetchSnapshot(): Promise<Snapshot | null> {
+export async function fetchSnapshot(
+  config: DashboardConfig
+): Promise<Snapshot | null> {
   if (!url || !key) return null;
 
   const res = await fetch(`${url}/rest/v1/${config.data.snapshotPath}`, {

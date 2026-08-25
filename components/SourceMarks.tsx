@@ -1,4 +1,4 @@
-import { SOURCE_LABELS, type Source } from '@/dashboard.config';
+import type { Source } from '@/dashboard.config';
 
 const ORDER: Source[] = ['marketing', 'store', 'ops'];
 
@@ -7,14 +7,21 @@ const ORDER: Source[] = ['marketing', 'store', 'ops'];
  *
  * This isn't decoration — it's the argument. A tile lit in two places is
  * a number no single browser tab can produce, and the reader can see that
- * without anyone explaining it.
+ * without anyone explaining it. The feed names come from the active board,
+ * so an agency reads "Ads + Revenue" where a CFO reads "Ledger + Billing".
  */
-export default function SourceMarks({ sources }: { sources: Source[] }) {
+export default function SourceMarks({
+  sources,
+  labels,
+}: {
+  sources: Source[];
+  labels: Record<Source, string>;
+}) {
   const used = ORDER.filter((s) => sources.includes(s));
   const caption =
     used.length > 1
-      ? used.map((s) => SOURCE_LABELS[s]).join(' + ')
-      : SOURCE_LABELS[used[0]];
+      ? used.map((s) => labels[s]).join(' + ')
+      : labels[used[0]];
 
   return (
     <div className="marks" title={`Source: ${caption}`}>
