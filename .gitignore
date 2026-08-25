@@ -5,6 +5,9 @@ node_modules
 *.tsbuildinfo
 next-env.d.ts
 
+# Claude Code local tooling state
+.claude
+
 # Local artifacts (not part of the app source)
 .playwright-mcp
 dashboard.png

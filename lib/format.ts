@@ -94,6 +94,29 @@ export function relativeTime(iso: string, now: number): string {
   return days === 1 ? '1 day ago' : `${days} days ago`;
 }
 
+/**
+ * Present an ad channel by category, never by brand — so a cover-safe demo
+ * shows "Paid social" where the synthetic row happens to say "Meta". Unknown
+ * values pass through unchanged.
+ */
+const CHANNELS: Record<string, string> = {
+  meta: 'Paid social',
+  facebook: 'Paid social',
+  instagram: 'Paid social',
+  tiktok: 'Creator',
+  google: 'Paid search',
+  bing: 'Paid search',
+  youtube: 'Video',
+  email: 'Email',
+  klaviyo: 'Email',
+};
+
+export function channelLabel(raw: unknown): string {
+  if (raw === null || raw === undefined) return '—';
+  const s = String(raw);
+  return CHANNELS[s.toLowerCase()] ?? s;
+}
+
 export function shortDate(iso: string): string {
   const d = new Date(`${iso}T00:00:00Z`);
   return d.toLocaleDateString(L, {

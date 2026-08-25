@@ -5,6 +5,7 @@ import type { CSSProperties } from 'react';
 import type { DashboardConfig } from '@/dashboard.config';
 import type { Snapshot } from '@/lib/data';
 import {
+  channelLabel,
   formatValue,
   percentChange,
   pointChange,
@@ -204,15 +205,20 @@ export default function Dashboard({
 
         <section className="tiles">
           {config.kpis.map((kpi) => {
-            const value = field(snap, kpi.field);
+            // Channels render by category, never by brand — cover-safe.
+            const rawValue = field(snap, kpi.field);
+            const value =
+              kpi.field === 'top_channel' ? channelLabel(rawValue) : rawValue;
             const prev = field(snap, kpi.prevField);
 
             const delta =
               kpi.deltaStyle === 'points'
-                ? pointChange(value, prev)
-                : percentChange(value, prev);
+                ? pointChange(rawValue, prev)
+                : percentChange(rawValue, prev);
 
-            const subValue = field(snap, kpi.subField);
+            const rawSub = field(snap, kpi.subField);
+            const subValue =
+              kpi.subField === 'top_channel' ? channelLabel(rawSub) : rawSub;
             const subPrev = field(snap, kpi.subPrevField);
 
             const joined = kpi.sources.length > 1;

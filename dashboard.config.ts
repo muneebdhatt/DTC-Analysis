@@ -195,7 +195,7 @@ const riveraCole: DashboardConfig = {
       subFormat: 'text',
       showChannelShare: true,
       sources: ['marketing'],
-      note: 'Meta and Google combined.',
+      note: 'Paid social and search combined.',
     },
     {
       id: 'on_time',
