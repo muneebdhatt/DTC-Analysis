@@ -68,6 +68,10 @@ export interface DashboardConfig {
     initials: string;
     footerNote: string;
   };
+  /** Who this board is for — shown on the shared landing page. */
+  audience: string;
+  /** One line describing what the board shows — shown on the landing page. */
+  tagline: string;
   theme: Record<string, string>;
   /** What each feed is called on this board — reskins the provenance marks. */
   sourceLabels: Record<Source, string>;
@@ -120,6 +124,9 @@ const riveraCole: DashboardConfig = {
     initials: 'RC',
     footerNote: 'Illustrative sample data. Not a real company.',
   },
+  audience: 'DTC & ecommerce founders',
+  tagline:
+    'The daily operating numbers — revenue, ROAS and CAC, orders and AOV, on-time fulfilment.',
   theme: {
     '--paper': '#E8E4DA',
     '--card': '#FAF8F4',
@@ -231,6 +238,9 @@ const agency: DashboardConfig = {
     initials: 'HM',
     footerNote: 'Illustrative sample data. Not a real agency.',
   },
+  audience: 'Marketing agencies & fractional marketers',
+  tagline:
+    'A book of client accounts — spend under management, blended ROAS, leads and cost per lead.',
   theme: {
     '--paper': '#E6EAEF',
     '--card': '#F7F9FB',
@@ -339,6 +349,9 @@ const cfo: DashboardConfig = {
     initials: 'MC',
     footerNote: 'Illustrative sample data. Not a real firm.',
   },
+  audience: 'Fractional CFOs & bookkeepers',
+  tagline:
+    'A client-book finance view — liquidity and DSO, gross margin, operating costs, month-end close.',
   theme: {
     '--paper': '#E7E9E0',
     '--card': '#F8F9F3',

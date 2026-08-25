@@ -52,6 +52,11 @@ column reads as *blended ROAS* for the agency and *current ratio* for the CFO;
 CAC becomes *cost / lead*, then *DSO in days*. One row powers all three, so
 there's nothing extra to seed to demo a reskin.
 
+**A shared landing page** at `/showcase` lists all three boards — brand,
+palette, who each is for, and links straight into the board (and its live
+demo). It reads the same registry, so a new variant appears there on its own.
+Good for a single link that lets someone browse the whole cluster.
+
 **Pick a board two ways:**
 
 - **Per link** — append `?variant=agency` or `?variant=cfo` to any URL. Ideal
