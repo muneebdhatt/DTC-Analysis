@@ -1,4 +1,5 @@
 import type { DashboardConfig } from '@/dashboard.config';
+import { channelLabel } from '@/lib/format';
 
 export interface TrendPoint {
   date: string;
@@ -63,5 +64,19 @@ export async function fetchSnapshot(
   const row = rows?.[0];
   if (!row) return null;
 
-  return { ...row, trend: Array.isArray(row.trend) ? row.trend : [] };
+  return normalizeSnapshot(row);
+}
+
+/**
+ * Sanitise a raw row before it reaches the page. Guards the trend shape and
+ * presents the channel by category, so no real brand name ends up in the
+ * rendered UI *or* the serialized props — the whole payload stays cover-safe.
+ * Used on both the server fetch and the client poll.
+ */
+export function normalizeSnapshot(row: Snapshot): Snapshot {
+  return {
+    ...row,
+    top_channel: channelLabel(row.top_channel),
+    trend: Array.isArray(row.trend) ? row.trend : [],
+  };
 }

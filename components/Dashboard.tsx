@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { CSSProperties } from 'react';
 import type { DashboardConfig } from '@/dashboard.config';
-import type { Snapshot } from '@/lib/data';
+import { normalizeSnapshot, type Snapshot } from '@/lib/data';
 import {
   channelLabel,
   formatValue,
@@ -52,7 +52,7 @@ export default function Dashboard({
       });
       if (res.ok) {
         const rows = (await res.json()) as Snapshot[];
-        if (rows?.[0]) setSnap(rows[0]);
+        if (rows?.[0]) setSnap(normalizeSnapshot(rows[0]));
       }
     } catch {
       // Keep the last good snapshot on screen. A network blip should age
