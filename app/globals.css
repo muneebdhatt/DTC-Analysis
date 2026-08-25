@@ -1,0 +1,514 @@
+/* =====================================================================
+   Rivera & Cole — "morning ledger"
+   Warm putty paper, ink type, earth-tone deltas. Deliberately not the
+   charcoal-and-neon dashboard look: this page replaces a printed morning
+   report and should feel like the thing it replaces.
+   Colours arrive as CSS custom properties from dashboard.config.ts.
+   ===================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body), Georgia, serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.shell {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 40px 28px 56px;
+}
+
+/* ── masthead ─────────────────────────────────────────────────────── */
+
+.masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 18px;
+  border-bottom: 1.5px solid var(--ink);
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.brand-mark {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--card);
+  background: var(--accent);
+  padding: 4px 7px;
+  border-radius: var(--radius);
+  align-self: center;
+}
+
+.brand-name {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: -0.01em;
+}
+
+.brand-eyebrow {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.stamp-stale {
+  color: var(--negative);
+}
+
+.pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--positive);
+  flex: none;
+}
+
+.stamp-stale .pulse {
+  background: var(--negative);
+}
+
+.pulse-active {
+  animation: pulse 0.9s ease-out;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(63, 93, 69, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 9px rgba(63, 93, 69, 0);
+  }
+}
+
+/* ── hero ─────────────────────────────────────────────────────────── */
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 32px;
+  padding: 34px 0 30px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.hero-label {
+  margin: 0 0 6px;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.hero-window {
+  color: var(--ink-faint);
+}
+
+.hero-value {
+  display: block;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 700;
+  font-size: clamp(52px, 11vw, 104px);
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+}
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.hero-right {
+  width: 220px;
+  max-width: 40vw;
+}
+
+/* ── tiles ────────────────────────────────────────────────────────── */
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.tile {
+  background: var(--paper);
+  padding: 24px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+/* The joined tile is the argument of the whole page, so it gets the one
+   piece of emphasis on the row — a card surface and an accent rule. */
+.tile-joined {
+  background: var(--card);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.tile-label {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.tile-value {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 600;
+  font-size: 34px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.tile-sub {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  margin: 2px 0 0;
+  flex-wrap: wrap;
+}
+
+.tile-sub-label {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.tile-sub-value {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+}
+
+.tile-share {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+.tile-note {
+  margin: 6px 0 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  font-style: italic;
+  color: var(--ink-soft);
+  flex: 1;
+}
+
+/* ── deltas ───────────────────────────────────────────────────────── */
+
+.delta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font-family: var(--font-mono), monospace;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.delta-arrow {
+  font-size: 11px;
+}
+
+.delta-good {
+  color: var(--positive);
+}
+.delta-bad {
+  color: var(--negative);
+}
+.delta-neutral {
+  color: var(--ink-soft);
+}
+.delta-none {
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+.delta-suffix {
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+
+/* ── provenance marks ─────────────────────────────────────────────── */
+
+.marks {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.marks-row {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.mark {
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--rule);
+  border-radius: 1px;
+}
+
+.mark.on {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.tile-joined .mark.on {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.marks-caption {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ── charts ───────────────────────────────────────────────────────── */
+
+.sparkline {
+  width: 100%;
+  height: 56px;
+  display: block;
+}
+
+.spark-line,
+.trend-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.6;
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+}
+
+.spark-area,
+.trend-area {
+  fill: var(--accent);
+  opacity: 0.09;
+}
+
+.panel {
+  padding: 30px 0 8px;
+}
+
+.panel-label {
+  margin: 0 0 16px;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.trend {
+  position: relative;
+}
+
+.trend-svg {
+  width: 100%;
+  height: 220px;
+  display: block;
+  overflow: visible;
+}
+
+.grid-line {
+  stroke: var(--rule-soft);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.trend-cursor {
+  stroke: var(--ink);
+  stroke-width: 1;
+  opacity: 0.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.trend-dot {
+  fill: var(--accent);
+  stroke: var(--paper);
+  stroke-width: 2;
+}
+
+.trend-readout {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 8px;
+  min-height: 26px;
+}
+
+.trend-readout-date {
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.trend-readout-value {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 600;
+  font-size: 21px;
+  font-variant-numeric: tabular-nums;
+}
+
+.trend-axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+/* ── the digit roll ───────────────────────────────────────────────── */
+
+.digit {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+
+.digit-moved {
+  animation: roll 0.5s cubic-bezier(0.2, 0.7, 0.3, 1);
+  color: var(--accent);
+}
+
+@keyframes roll {
+  0% {
+    transform: translateY(-0.42em);
+    opacity: 0;
+  }
+  55% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ── footer & states ──────────────────────────────────────────────── */
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+.empty {
+  font-size: 15px;
+  font-style: italic;
+  color: var(--ink-soft);
+  padding: 48px 0;
+}
+
+/* ── responsive ───────────────────────────────────────────────────── */
+
+@media (max-width: 880px) {
+  .tiles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .shell {
+    padding: 26px 18px 40px;
+  }
+  .hero {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+  .hero-right {
+    width: 100%;
+    max-width: none;
+  }
+  .tiles {
+    grid-template-columns: 1fr;
+  }
+  .masthead {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+/* ── accessibility floor ──────────────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .digit-moved,
+  .pulse-active {
+    animation: none;
+  }
+  .digit-moved {
+    color: var(--accent);
+  }
+  * {
+    transition: none !important;
+  }
+}
